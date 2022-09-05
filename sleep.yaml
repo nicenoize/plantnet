@@ -1,0 +1,33 @@
+ apiVersion: v1
+ kind: Pod
+ metadata:
+   name: sleep
+ spec:
+   containers:
+   - name: sleep
+     image:  registry.datexis.com/bvanaken-shk/xai-benchmark:v1.0
+     imagePullPolicy: "Always"
+     command:
+          - /bin/sh
+          - "-c"
+          - "sleep 10h"
+     volumeMounts:
+      - mountPath: "/plantnet"
+        name: plantnet-pvc
+     resources:
+            requests:
+              nvidia.com/gpu: 1
+              memory: "8Gi"
+              cpu: "500m"
+            limits:
+              nvidia.com/gpu: 1 # requesting 1 GPU
+              memory: 8Gi
+              cpu: "1000m"
+   nodeSelector:
+        gpu: k80
+   volumes:
+      - name: plantnet-pvc
+        persistentVolumeClaim:
+          claimName: plantnet-pvc
+   imagePullSecrets:
+   - name: private-registry-auth

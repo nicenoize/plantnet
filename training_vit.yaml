@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: plantnet-vit
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: plantnet-vit
+    spec:
+      restartPolicy: "Never"
+      containers:
+        - name: plantnet-vit
+          image: registry.datexis.com/s36400/plantnet:v1.9
+          imagePullPolicy: "Always"
+          ports:
+            - name: client-port
+              containerPort: 6006
+          resources:
+            requests:
+              nvidia.com/gpu: 1
+              memory: "4Gi"
+              cpu: "1000m"
+            limits:
+              nvidia.com/gpu: 1 # requesting 1 GPU  
+              memory: 40Gi
+              cpu: "12000m"
+          volumeMounts:
+            - name: plantnet-pvc
+              mountPath: "/plantnet"
+            - name: dshm
+              mountPath: /dev/shm
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "0"
+          command:
+            - /bin/sh
+            - "-c"
+            - "python main_vit.py --use_gpu"
+      nodeSelector:
+        gpu: v100
+      imagePullSecrets:
+        - name:  private-registry-auth
+      volumes:
+      - name: plantnet-pvc
+        persistentVolumeClaim:
+          claimName: plantnet-pvc
+      - name: dshm
+        emptyDir:
+          medium: Memory
