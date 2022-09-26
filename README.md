@@ -9,3 +9,10 @@
 - For training: Adjust batch_size and n_epochs in main.py according to inline comments
 - Run main.py to train and test the (pre-trained)-model
 - Output of main.py: Weights of best model and csv-file with results over each epoch
+
+
+Training
+- execute main.py for Resnet, main_resnext.py for Resnext, main_vit.py for ViT, main_baselone for Baseline
+
+Training on Cluster
+- apply training_resnet.yaml, training_resnext.yaml, training_vit.yaml, training_baseline.yaml
