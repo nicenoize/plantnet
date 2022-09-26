@@ -12,7 +12,7 @@ spec:
       restartPolicy: "Never"
       containers:
         - name: plantnet-resnet
-          image: registry.datexis.com/s36400/plantnet:Augmentation
+          image: registry.datexis.com/s36400/plantnet:Augmentation-bs128-WD
           imagePullPolicy: "Always"
           ports:
             - name: client-port
@@ -21,7 +21,7 @@ spec:
             requests:
               nvidia.com/gpu: 1
               memory: "4Gi"
-              cpu: "1000m"
+              cpu: "2000m"
             limits:
               nvidia.com/gpu: 1 # requesting 1 GPU
               memory: 40Gi

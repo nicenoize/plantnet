@@ -12,7 +12,7 @@ spec:
       restartPolicy: "Never"
       containers:
         - name: plantnet-vit
-          image: registry.datexis.com/s36400/plantnet:v1.9
+          image: registry.datexis.com/s36400/plantnet:ViT-100epochs-0.003lr
           imagePullPolicy: "Always"
           ports:
             - name: client-port
@@ -20,11 +20,11 @@ spec:
           resources:
             requests:
               nvidia.com/gpu: 1
-              memory: "4Gi"
+              memory: "40Gi"
               cpu: "1000m"
             limits:
               nvidia.com/gpu: 1 # requesting 1 GPU  
-              memory: 40Gi
+              memory: 100Gi
               cpu: "12000m"
           volumeMounts:
             - name: plantnet-pvc

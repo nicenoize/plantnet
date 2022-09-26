@@ -5,6 +5,8 @@ from utils import count_correct_topk, update_correct_per_class, \
     update_correct_per_class_topk
 import torch.nn.functional as F
 from collections import defaultdict
+import torchvision.transforms as transforms
+
 
 
 
@@ -21,10 +23,18 @@ def train_epoch(model, optimizer, train_loader, criteria, loss_train, f1_train, 
 
     
     for batch_idx, (batch_x_train, batch_y_train) in enumerate(tqdm(train_loader, desc='train', position=0)):
+        #transform = transforms.Compose([
+        #    #transforms.AutoAugmentPolicy(transforms.AutoAugmentPolicy.IMAGENET),
+        #    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
+        #    transforms.ToTensor()
+        #])
+        #batch_x_train = transform(batch_x_train)
+        #batch_y_train = transform(batch_y_train)
         if use_gpu:
             batch_x_train, batch_y_train = batch_x_train.cuda(), batch_y_train.cuda()
         optimizer.zero_grad()
         
+
         batch_output_train = model(batch_x_train)
         loss_batch_train = criteria(batch_output_train, batch_y_train)
         loss_epoch_train += loss_batch_train.item()

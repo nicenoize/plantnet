@@ -10,7 +10,6 @@ from torchvision.transforms import CenterCrop
 from torchvision.transforms import RandAugment
 from torch.utils.data import WeightedRandomSampler
 from torchvision.transforms import InterpolationMode
-import PIL
 
 
 def set_seed(seed, use_gpu, print_out=True):
@@ -110,9 +109,6 @@ def get_data(size_image,root,batch_size, num_workers):
     transform = transforms.Compose(
         [MaxCenterCrop(),
         transforms.Resize(size_image),
-        transforms.ColorJitter(hue=.05, saturation=.05),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(20),
         transforms.ToTensor()])
 
 
@@ -140,15 +136,6 @@ def get_data(size_image,root,batch_size, num_workers):
 
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                              shuffle=False, num_workers=num_workers)
-
-
-
-    dataset_attributes = {'n_train': len(trainset), 'n_test': len(testset), 'n_classes': n_classes,
-                          'lr_schedule': [40, 50, 60],
-                          'class2num_instances': {'train': train_class_to_num_instances,
-                                                  'test': test_class_to_num_instances},
-                          'class_to_idx': trainset.class_to_idx}
-
     
 
     return trainloader, testloader, dataset_attributes

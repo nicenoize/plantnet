@@ -12,7 +12,7 @@ spec:
       restartPolicy: "Never"
       containers:
         - name: plantnet-resnext
-          image: registry.datexis.com/s36400/plantnet:v1.7
+          image: registry.datexis.com/s36400/plantnet:Augmentation-bs128-WD
           imagePullPolicy: "Always"
           ports:
             - name: client-port
@@ -39,7 +39,7 @@ spec:
             - "-c"
             - "python main_resnext.py --use_gpu"
       nodeSelector:
-        gpu: p100
+        gpu: v100
       imagePullSecrets:
         - name:  private-registry-auth
       volumes:

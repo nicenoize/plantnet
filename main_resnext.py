@@ -41,12 +41,11 @@ def train(mu,lr,batch_size,n_epochs,k,model,use_gpu,size_image,seed,num_workers,
 
     optimizer = SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=mu, nesterov=True)
     
-    
     # Containers for storing metrics over epochs
     loss_train, acc_train, f1_train, topk_acc_train = [], [], [], []
     loss_test, acc_test, f1_test, topk_acc_test = [], [], [], []
     
-    save_dir = '/plantnet'
+    save_dir = '/plantnet/AugmentationWRS'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -63,39 +62,18 @@ def train(mu,lr,batch_size,n_epochs,k,model,use_gpu,size_image,seed,num_workers,
                                                                               topk_acc_train, k,
                                                                               dataset_attributes['n_train'],
                                                                               use_gpu)
-        
-
-    #load_model(model, os.path.join(save_dir, 'weights_best_acc.tar'), use_gpu)
    
         loss_epoch_test, f1_epoch_test, acc_epoch_test, topk_acc_epoch_test, \
         class_acc_test = test_epoch(model, test_loader, criteria, 
                                     loss_test, acc_test, f1_test, topk_acc_test,
                                     k, use_gpu, dataset_attributes)
 
-        """ print()
-        print(f'epoch {epoch} took {time.time()-t:.2f}')
-        print(f'loss_train : {loss_epoch_train}')
-        print(f'f1_train : {f1_epoch_train}')
-        print(f'acc_train : {acc_epoch_train} / topk_acc_train : {topk_acc_epoch_train}')
-        print(f'loss_test : {loss_epoch_test}')
-        print(f'f1_test : {f1_epoch_test}')
-        print(f'acc_test : {acc_epoch_test} / topk_acc_train : {topk_acc_epoch_test}') """
-
         if acc_epoch_test > best_acc:
             best_acc = acc_epoch_test
             save(model, optimizer, epoch, os.path.join(save_dir, 'weights_best_acc.tar'))
-
-    """ results = {'loss_train': loss_train, 'f1_train': f1_train, 'acc_train': acc_train, 'topk_acc_train': topk_acc_train, 
-            'test_results': {'loss_test': loss_test,
-                                'f1_test': f1_test,
-                                'acc_test': acc_test,
-                                'topk_acc_test': topk_acc_test,
-                                'class_acc_dict': class_acc_test}
-            } """
-    
               
     #Writing results to csv file
-    with open(save_dir+'/results_%s_%s.csv' %(model.name,n_epochs), 'w', newline='') as csvfile:
+    with open(save_dir+'/results_%s_%s_resnext.csv' %(model.name,n_epochs), 'w', newline='') as csvfile:
         fieldnames = ['loss_train','acc_train', 'topk_acc_train', 'f1_train','loss_test','acc_test', 'topk_acc_test', 'f1_test']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -105,11 +83,11 @@ def train(mu,lr,batch_size,n_epochs,k,model,use_gpu,size_image,seed,num_workers,
 
 if __name__ == '__main__':
     #Loss parameters
-    mu = 0. #weight decay parameter
+    mu = 0 #weight decay parameter
 
     #Training parameters
     lr = 0.01 #learning rate to use RESNET: 0.01  VIT: 0.0005
-    batch_size = 32   #For all models: 32
+    batch_size = 128   #For all models: 32
     n_epochs = 30  #RESNET: 30 VIT: 20
     k = [5] #top-k-evaluation
 
@@ -144,8 +122,8 @@ if __name__ == '__main__':
 
     # Miscellaneous parameters
     seed= 0 # set the seed for reproductible experiments
-    num_workers=2 # increase this value to use multiprocess data loading. Default is one. You can bring it up. If you have memory errors go back to one
+    num_workers=8 # increase this value to use multiprocess data loading. Default is one. You can bring it up. If you have memory errors go back to one
     root='/plantnet' #location of the train val and test directories
 
 
-    train(mu,lr,batch_size,n_epochs,k,model,use_gpu,size_image,seed,32,root)
+    train(mu,lr,batch_size,n_epochs,k,model,use_gpu,size_image,seed,batch_size,root)
