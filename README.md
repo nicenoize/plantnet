@@ -17,3 +17,6 @@ Training
 
 Training on Cluster
 - apply training_resnet.yaml, training_resnext.yaml, training_vit.yaml, training_baseline.yaml
+
+Plots
+- to generate Plots from the csv-files, load them into the results-Jupyter notebook and use the provided plot Function
