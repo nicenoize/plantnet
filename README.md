@@ -12,11 +12,11 @@
 - to use Imbalanced Datasampler, change utils-imbal.py to utils.py
 - to deactivated WeightedRandomSampler, change utils-old.py to utils.py
 
-Training
+### Training
 - execute main.py for Resnet, main_resnext.py for Resnext, main_vit.py for ViT, main_baselone for Baseline
 
-Training on Cluster
+### Training on Cluster
 - apply training_resnet.yaml, training_resnext.yaml, training_vit.yaml, training_baseline.yaml
 
-Plots
+### Plots
 - to generate Plots from the csv-files, load them into the results-Jupyter notebook and use the provided plot Function
